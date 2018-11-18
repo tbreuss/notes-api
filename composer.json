@@ -1,0 +1,22 @@
+{
+  "require": {
+    "php": ">=7.0.0",
+    "firebase/php-jwt": "^5.0",
+    "yiisoft/yii2": "~2.0.0"
+  },
+  "require-dev": {
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "src\\": "src/"
+    }
+  },
+  "scripts": {
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
+}
