@@ -3,12 +3,12 @@
 return [
     'id' => 'ch.tebe.notes',
     // the basePath of the application will be the `micro-app` directory
-    'basePath' => __DIR__,
+    'basePath' => dirname(__DIR__),
     // this is where the application will find all controllers
     'controllerNamespace' => 'notes\controllers',
     // set an alias to enable autoloading of classes from the 'micro' namespace
     'aliases' => [
-        '@notes' => __DIR__,
+        '@notes' => dirname(__DIR__),
     ],
     'components' => [
         'db' => require __DIR__ . '/db.php',
