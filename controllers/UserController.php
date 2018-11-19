@@ -2,9 +2,12 @@
 
 namespace notes\controllers;
 
-use notes\components\RestController;
+use notes\components\BehaviorsTrait;
+use yii\rest\ActiveController;
 
-class UserController extends RestController
+class UserController extends ActiveController
 {
+    use BehaviorsTrait;
+
     public $modelClass = 'notes\models\User';
 }

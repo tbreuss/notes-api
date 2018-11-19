@@ -2,9 +2,7 @@
 
 namespace notes\components;
 
-use yii\rest\ActiveController;
-
-class RestController extends ActiveController
+trait BehaviorsTrait
 {
     public function behaviors()
     {

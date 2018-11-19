@@ -2,11 +2,14 @@
 
 namespace notes\controllers;
 
-use notes\components\RestController;
+use notes\components\BehaviorsTrait;
 use notes\models\Article;
+use yii\rest\ActiveController;
 
-class ArticleController extends RestController
+class ArticleController extends ActiveController
 {
+    use BehaviorsTrait;
+
     public $modelClass = 'notes\models\Article';
 
     public function actionLatest()
