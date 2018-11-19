@@ -12,7 +12,7 @@ class m181119_194602_add_user_token extends Migration
      */
     public function up()
     {
-        $this->addColumn('users', 'auth_token', $this->string(100)->null()->after('salt'));
+        $this->addColumn('users', 'access_token', $this->string(100)->null()->after('salt'));
     }
 
     /**
@@ -20,6 +20,6 @@ class m181119_194602_add_user_token extends Migration
      */
     public function down()
     {
-        $this->dropColumn('users', 'auth_token');
+        $this->dropColumn('users', 'access_token');
     }
 }
