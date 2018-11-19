@@ -1,5 +1,8 @@
 <?php
 
+$params = require __DIR__ . '/params.php';
+$db = require __DIR__ . '/db.php';
+
 return [
     'id' => 'ch.tebe.notes',
     'basePath' => dirname(__DIR__),
@@ -8,7 +11,7 @@ return [
         '@notes' => dirname(__DIR__),
     ],
     'components' => [
-        'db' => require __DIR__ . '/db.php',
+        'db' => $db,
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -52,5 +55,6 @@ return [
                 ],
             ],
         ]*/
-    ]
+    ],
+    'params' => $params
 ];
