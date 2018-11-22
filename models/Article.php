@@ -18,6 +18,14 @@ class Article extends ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        $fields = parent::fields();
+        #$fields[] = 'createdByUser';
+        #$fields[] = 'modifiedByUser';
+        return $fields;
+    }
+
     /**
      * @return array
      */
@@ -72,5 +80,15 @@ class Article extends ActiveRecord
             ->asArray()
             ->all();
         return $articles;
+    }
+
+    public function getCreatedByUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+
+    public function getModifiedByUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'modified_by']);
     }
 }

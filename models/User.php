@@ -2,6 +2,8 @@
 
 namespace notes\models;
 
+use Firebase\JWT\JWT;
+use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -22,33 +24,77 @@ class User extends ActiveRecord implements IdentityInterface
         $fields = parent::fields();
 
         // remove fields that contain sensitive information
-        unset($fields['password'], $fields['salt'], $fields['password_reset_token']);
+        unset(
+            $fields['password'],
+            $fields['salt'],
+            $fields['access_token']
+        );
 
         return $fields;
     }
 
     public static function findIdentity($id)
     {
-        // TODO: Implement findIdentity() method.
+        return static::findOne($id);
     }
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        // TODO: Implement findIdentityByAccessToken() method.
+        return static::findOne([
+            'access_token' => $token,
+            'deleted' => 0
+        ]);
     }
 
     public function getId()
     {
-        // TODO: Implement getId() method.
+        return $this->id;
     }
 
     public function getAuthKey()
     {
-        // TODO: Implement getAuthKey() method.
+        return null;
     }
 
     public function validateAuthKey($authKey)
     {
-        // TODO: Implement validateAuthKey() method.
+        return false;
     }
+
+    public function generateToken(): string
+    {
+        $payload = array(
+            "iss" => 'ch.tebe.notes',
+            "iat" => time(),
+            //"exp" => time() + (60*60*24),
+            'user' => [
+                'id' => $this->id,
+                'name' => $this->username,
+                'role' => $this->role,
+                'scopes' => json_decode($this->scopes, true)
+            ]
+        );
+        $key = Yii::app()->params['jwt.private_key'];
+        $jwt = JWT::encode($payload, $key, 'HS256');
+        return $jwt;
+    }
+
+    public static function findByUsername($username)
+    {
+        return static::findOne([
+            'username' => $username,
+            'deleted' => 0
+        ]);
+    }
+
+    function validatePassword(string $password): bool
+    {
+        return $this->hashPassword($password, $this->salt) === $this->password;
+    }
+
+    public function hashPassword(string $password, string $salt): string
+    {
+        return md5($salt . $password);
+    }
+
 }

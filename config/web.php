@@ -15,6 +15,12 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'request' => [
+            'cookieValidationKey' => 'ZCxc233xJDfhOnRydWV9wZeuweG9lIiwiYWRtaW4i',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser'
+            ]
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'enableStrictParsing' => true,
@@ -22,6 +28,7 @@ return [
             'rules' => [
                 'GET /' => 'site/index',
                 'GET ping' => 'site/ping',
+                'POST login' => 'site/login',
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'article',
@@ -29,7 +36,8 @@ return [
                         'GET latest' => 'latest',
                         'GET liked' => 'liked',
                         'GET modified' => 'modified',
-                        'GET popular' => 'popular'
+                        'GET popular' => 'popular',
+                        'POST upload' => 'upload'
                     ],
                     'except' => ['delete', 'create', 'update']
                 ],
@@ -44,6 +52,11 @@ return [
                     'except' => ['delete', 'create', 'update']
                 ],
             ],
+        ],
+        'user' => [
+            'identityClass' => 'notes\models\User',
+            'enableAutoLogin' => false,
+            'enableSession' => false
         ],
         /*'response' => [
             'formatters' => [
