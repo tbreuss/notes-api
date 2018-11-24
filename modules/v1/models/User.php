@@ -1,9 +1,10 @@
 <?php
 
-namespace notes\models;
+namespace notes\modules\v1\models;
 
 use Firebase\JWT\JWT;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -95,6 +96,20 @@ class User extends ActiveRecord implements IdentityInterface
     public function hashPassword(string $password, string $salt): string
     {
         return md5($salt . $password);
+    }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public static function findAllAsProvider()
+    {
+        $provider = new ActiveDataProvider([
+            'query' => static::find(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+        return $provider;
     }
 
 }
