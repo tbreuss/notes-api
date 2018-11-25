@@ -9,6 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'notes\commands',
     'aliases' => [
+        '@notes' => dirname(__DIR__),
         #'@bower' => '@vendor/bower-asset',
         #'@npm'   => '@vendor/npm-asset',
         #'@tests' => '@app/tests',

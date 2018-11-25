@@ -6,15 +6,27 @@ use Firebase\JWT\JWT;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\web\IdentityInterface;
 
 /**
  * Class User
  * @package notes\models
  * @see https://stackoverflow.com/questions/25327476/implementing-an-restful-api-authentication-using-tokens-yii-yii2
+ *
+ * @property string username
+ * @property string password
+ * @property string salt
+ * @property string name
+ * @property string email
+ * @property string created
+ * @property string modified
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_RENEW_PASSWORD = 'renewPassword';
+
     public static function tableName()
     {
         return '{{users}}';
@@ -32,6 +44,30 @@ class User extends ActiveRecord implements IdentityInterface
         );
 
         return $fields;
+    }
+
+    public function rules()
+    {
+        return [
+            // SCENARIO_CREATE
+            // username
+            [['username'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['username'], 'string', 'length' => [4, 50], 'on' => self::SCENARIO_CREATE],
+            [['username'], 'unique', 'on' => self::SCENARIO_CREATE],
+            // password
+            [['password'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['password'], 'string', 'min' => 8, 'on' => self::SCENARIO_CREATE],
+            // name
+            [['name'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['name'], 'string', 'length' => [2, 50], 'on' => self::SCENARIO_CREATE],
+            // email
+            [['email'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['email'], 'email', 'on' => self::SCENARIO_CREATE],
+            // SCENARIO_RENEW_PASSWORD
+            // password
+            [['password'], 'required', 'on' => self::SCENARIO_RENEW_PASSWORD],
+            [['password'], 'string', 'min' => 8, 'on' => self::SCENARIO_RENEW_PASSWORD],
+        ];
     }
 
     public static function findIdentity($id)
@@ -80,6 +116,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $jwt;
     }
 
+    public function generateSalt()
+    {
+        return \Yii::$app->security->generateRandomString();
+    }
+
     public static function findByUsername($username)
     {
         return static::findOne([
@@ -110,6 +151,34 @@ class User extends ActiveRecord implements IdentityInterface
             ],
         ]);
         return $provider;
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->getScenario() === static::SCENARIO_CREATE) {
+                if ($this->isNewRecord) {
+                    $this->salt = $this->generateSalt();
+                    $this->password = $this->hashPassword($this->password, $this->salt);
+                    $this->created = new Expression('NOW()');
+                } else {
+                    $this->modified = new Expression('NOW()');
+                }
+            }
+            if ($this->getScenario() === static::SCENARIO_RENEW_PASSWORD) {
+                if (!$this->isNewRecord) {
+                    $this->salt = $this->generateSalt();
+                    $this->password = $this->hashPassword($this->password, $this->salt);
+                    $this->modified = new Expression('NOW()');
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
 }
