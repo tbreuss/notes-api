@@ -31,9 +31,7 @@ class SiteController extends Controller
             $token = $model->generateToken();
             $model->lastlogin = date('Y-m-d H:i:s');
             $model->save(false);
-            return [
-                'token' => $token
-            ];
+            return $token;
         }
         throw new ForbiddenHttpException('Incorrect username or password.');
     }
