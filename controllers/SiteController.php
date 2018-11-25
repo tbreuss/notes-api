@@ -3,9 +3,7 @@
 namespace notes\controllers;
 
 use notes\components\BehaviorsTrait;
-use notes\modules\v1\models\User;
 use yii\rest\Controller;
-use yii\web\ForbiddenHttpException;
 
 class SiteController extends Controller
 {

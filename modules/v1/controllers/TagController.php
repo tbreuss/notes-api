@@ -25,4 +25,9 @@ class TagController extends Controller
         }
         return $model;
     }
+
+    public function actionSelected($q = '', array $tags = [])
+    {
+        return Tag::findAllSelected($q, $tags);
+    }
 }

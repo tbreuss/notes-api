@@ -3,7 +3,6 @@
 namespace notes\modules\v1\models;
 
 use Firebase\JWT\JWT;
-use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -13,7 +12,6 @@ use yii\web\IdentityInterface;
  * Class User
  * @package notes\models
  * @see https://stackoverflow.com/questions/25327476/implementing-an-restful-api-authentication-using-tokens-yii-yii2
- *
  * @property string username
  * @property string password
  * @property string salt
@@ -21,6 +19,11 @@ use yii\web\IdentityInterface;
  * @property string email
  * @property string created
  * @property string modified
+ * @property string role
+ * @property string scopes
+ * @property string article_views
+ * @property string article_likes
+ * @property string last_login
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -111,7 +114,7 @@ class User extends ActiveRecord implements IdentityInterface
                 'scopes' => json_decode($this->scopes, true)
             ]
         );
-        $key = Yii::app()->params['jwt.private_key'];
+        $key = \Yii::app()->params['jwt.private_key'];
         $jwt = JWT::encode($payload, $key, 'HS256');
         return $jwt;
     }

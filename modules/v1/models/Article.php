@@ -4,10 +4,22 @@ namespace notes\modules\v1\models;
 
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 use yii\db\Query;
 
+/**
+ * Class Article
+ * @package notes\modules\v1\models
+ * @property string title
+ * @property string content
+ * @property string tag_ids
+ * @property int views
+ * @property int likes
+ */
 class Article extends ActiveRecord
 {
+    public $tags;
+
     public static function tableName()
     {
         return '{{articles}}';
@@ -154,4 +166,45 @@ class Article extends ActiveRecord
         return $dataProvider;
     }
 
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->tag_ids = ''; // we handle this in afterSave
+            if ($this->isNewRecord) {
+                $this->created = new Expression('NOW()');
+            } else {
+                $this->modified = new Expression('NOW()');
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $oldTagIds = [];
+        if (!empty($changedAttributes['tag_ids'])) {
+            $oldTagIds = explode(',', $changedAttributes['tag_ids']);
+        }
+
+        $this->saveTags($this->tags, $this->id, 99, $oldTagIds);
+    }
+
+    private function saveTags(string $tags, int $articleId, int $userId, array $oldTagIds)
+    {
+        // Tags in Tabelle speichern
+        $tagIds = Tag::saveAll($tags, $userId);
+
+        // Tag-IDs in Zwischentabelle speichern
+        ArticleTag::saveTags($articleId, $tagIds);
+
+        // Tag-IDs in Artikel aktualisieren
+        Article::updateAll(['tag_ids' => implode(',', $tagIds)], ['id' => $articleId]);
+
+        // Counter in Tags aktualisieren
+        Tag::updateFrequencies(array_merge($tagIds, $oldTagIds));
+
+        // Tags mit Counter=0 entfernen
+        Tag::deleteAll('frequency <= 0');
+    }
 }

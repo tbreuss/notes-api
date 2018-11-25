@@ -4,7 +4,6 @@ namespace notes\modules\v1\controllers;
 
 use notes\components\BehaviorsTrait;
 use notes\modules\v1\models\Article;
-use Yii;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
@@ -21,10 +20,11 @@ class ArticleController extends Controller
 
     public function actionCreate()
     {
+        // TODO return validation errors together with 400 status code
         $model = new Article();
-        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $model->load(\Yii::$app->getRequest()->getBodyParams(), '');
         if ($model->save()) {
-            $response = Yii::$app->getResponse();
+            $response = \Yii::$app->getResponse();
             $response->setStatusCode(201);
             $response->getHeaders()->set('Location', Url::toRoute(['article/view', 'id' => $model->id], true));
         } elseif (!$model->hasErrors()) {
@@ -39,7 +39,7 @@ class ArticleController extends Controller
         if ($model->delete() === false) {
             throw new ServerErrorHttpException('Failed to delete article for unknown reason.');
         }
-        Yii::$app->getResponse()->setStatusCode(204);
+        \Yii::$app->getResponse()->setStatusCode(204);
     }
 
     public function actionView(int $id)
@@ -54,11 +54,12 @@ class ArticleController extends Controller
 
     public function actionUpdate(int $id)
     {
+        // TODO return validation errors together with 400 status code
         $model = Article::findOne($id);
         if (!$model) {
             throw new NotFoundHttpException("Article $id not found");
         }
-        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $model->load(\Yii::$app->getRequest()->getBodyParams(), '');
         if ($model->save() === false && !$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to update article for unknown reason.');
         }
@@ -85,11 +86,9 @@ class ArticleController extends Controller
         return Article::findPopularItems();
     }
 
+    // TODO implement upload action
     public function actionUpload()
     {
     }
 
-    public function actionSelectedtags()
-    {
-    }
 }

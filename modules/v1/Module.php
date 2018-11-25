@@ -27,6 +27,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             // tags
             'GET v1/tags/<id:\d+>' => 'v1/tag/view',
             'GET v1/tags' => 'v1/tag/index',
+            'GET v1/tags/selected' => 'v1/tag/selected',
         ], false);
     }
 }
