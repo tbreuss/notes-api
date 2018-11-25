@@ -26,5 +26,4 @@ class SiteController extends Controller
             'status' => 404
         ];
     }
-
 }

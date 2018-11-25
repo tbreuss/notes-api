@@ -12,18 +12,19 @@ use yii\web\IdentityInterface;
  * Class User
  * @package notes\models
  * @see https://stackoverflow.com/questions/25327476/implementing-an-restful-api-authentication-using-tokens-yii-yii2
+ * @property int id
  * @property string username
  * @property string password
  * @property string salt
  * @property string name
  * @property string email
- * @property string created
- * @property string modified
  * @property string role
  * @property string scopes
  * @property string article_views
  * @property string article_likes
  * @property string last_login
+ * @property string created
+ * @property string modified
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -103,7 +104,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function generateToken(): string
     {
-        $payload = array(
+        $payload = [
             "iss" => 'ch.tebe.notes',
             "iat" => time(),
             //"exp" => time() + (60*60*24),
@@ -113,8 +114,8 @@ class User extends ActiveRecord implements IdentityInterface
                 'role' => $this->role,
                 'scopes' => json_decode($this->scopes, true)
             ]
-        );
-        $key = \Yii::app()->params['jwt.private_key'];
+        ];
+        $key = \Yii::$app->params['jwt.private_key'];
         $jwt = JWT::encode($payload, $key, 'HS256');
         return $jwt;
     }
@@ -132,7 +133,7 @@ class User extends ActiveRecord implements IdentityInterface
         ]);
     }
 
-    function validatePassword(string $password): bool
+    public function validatePassword(string $password): bool
     {
         return $this->hashPassword($password, $this->salt) === $this->password;
     }
@@ -183,5 +184,4 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return false;
     }
-
 }

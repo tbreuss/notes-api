@@ -10,11 +10,14 @@ use yii\db\Query;
 /**
  * Class Article
  * @package notes\modules\v1\models
+ * @property int id
  * @property string title
  * @property string content
  * @property string tag_ids
  * @property int views
  * @property int likes
+ * @property string created
+ * @property string modified
  */
 class Article extends ActiveRecord
 {

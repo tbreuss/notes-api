@@ -4,13 +4,17 @@ namespace notes\modules\v1\models;
 
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class Tag
  * @package notes\modules\v1\models
+ * @property int id
  * @property string name
  * @property int frequency
- *
+ * @property string created
+ * @property string modified
  */
 class Tag extends ActiveRecord
 {
@@ -94,11 +98,12 @@ class Tag extends ActiveRecord
     {
         $tags = explode(',', $tagsCsv);
         $trimed = array_map('trim', $tags);
-        $unique = static::array_iunique($trimed);
+        $unique = static::arrayIunique($trimed);
         return $unique;
     }
 
-    private static function array_iunique($array) {
+    private static function arrayIunique($array)
+    {
         $lowered = array_map('strtolower', $array);
         return array_intersect_key($array, array_unique($lowered));
     }
@@ -136,5 +141,4 @@ class Tag extends ActiveRecord
         }
         return false;
     }
-
 }

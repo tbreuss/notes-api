@@ -25,5 +25,4 @@ class UserController extends Controller
         }
         return $model;
     }
-
 }

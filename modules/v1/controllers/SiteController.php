@@ -37,5 +37,4 @@ class SiteController extends Controller
         }
         throw new ForbiddenHttpException('Incorrect username or password.');
     }
-
 }
