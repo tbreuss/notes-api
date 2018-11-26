@@ -11,6 +11,7 @@ return [
         '@notes' => dirname(__DIR__),
     ],
     'bootstrap' => [
+        'log',
         'v1'
     ],
     'modules' => [
@@ -19,6 +20,15 @@ return [
         ]
     ],
     'components' => [
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+            ],
+        ],
         'db' => $db,
         'errorHandler' => [
             'errorAction' => 'site/error',

@@ -6,6 +6,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\db\Query;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Article
@@ -38,8 +39,8 @@ class Article extends ActiveRecord
     public function fields()
     {
         $fields = parent::fields();
-        #$fields[] = 'createdByUser';
-        #$fields[] = 'modifiedByUser';
+        $fields['created_by_user'] = 'createdByUser';
+        $fields['modified_by_user'] = 'modifiedByUser';
         return $fields;
     }
 
@@ -169,6 +170,24 @@ class Article extends ActiveRecord
         return $dataProvider;
     }
 
+    private function saveTags(string $tags, int $articleId, int $userId, array $oldTagIds)
+    {
+        // Tags in Tabelle speichern
+        $tagIds = Tag::saveAll($tags, $userId);
+
+        // Tag-IDs in Zwischentabelle speichern
+        ArticleTag::saveTags($articleId, $tagIds);
+
+        // Tag-IDs in Artikel aktualisieren
+        Article::updateAll(['tag_ids' => implode(',', $tagIds)], ['id' => $articleId]);
+
+        // Counter in Tags aktualisieren
+        Tag::updateFrequencies(array_merge($tagIds, $oldTagIds));
+
+        // Tags mit Counter=0 entfernen
+        Tag::deleteAll('frequency <= 0');
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -193,21 +212,22 @@ class Article extends ActiveRecord
         $this->saveTags($this->tags, $this->id, 99, $oldTagIds);
     }
 
-    private function saveTags(string $tags, int $articleId, int $userId, array $oldTagIds)
+    public function beforeDelete()
     {
-        // Tags in Tabelle speichern
-        $tagIds = Tag::saveAll($tags, $userId);
+        if (!parent::beforeDelete()) {
+            return false;
+        }
 
-        // Tag-IDs in Zwischentabelle speichern
-        ArticleTag::saveTags($articleId, $tagIds);
+        $articleTags = ArticleTag::findAll(['article_id' => $this->id]);
+        $tagIds = ArrayHelper::getColumn($articleTags, 'tag_id');
 
-        // Tag-IDs in Artikel aktualisieren
-        Article::updateAll(['tag_ids' => implode(',', $tagIds)], ['id' => $articleId]);
-
-        // Counter in Tags aktualisieren
-        Tag::updateFrequencies(array_merge($tagIds, $oldTagIds));
-
-        // Tags mit Counter=0 entfernen
+        ArticleLike::deleteAll(['article_id' => $this->id]);
+        ArticleTag::deleteAll(['article_id' => $this->id]);
+        ArticleView::deleteAll(['article_id' => $this->id]);
+        History::deleteAll(['article_id' => $this->id]);
+        Tag::updateFrequencies($tagIds);
         Tag::deleteAll('frequency <= 0');
+
+        return true;
     }
 }

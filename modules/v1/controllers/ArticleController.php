@@ -51,7 +51,10 @@ class ArticleController extends Controller
 
     public function actionView(int $id)
     {
-        $model = Article::findOne($id);
+        $model = Article::find()
+            ->with('createdByUser', 'modifiedByUser')
+            ->where(['id' => $id])
+            ->one();
         if (!$model) {
             throw new NotFoundHttpException("Article $id not found");
         }

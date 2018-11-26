@@ -14,6 +14,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             // articles
             'GET v1/articles/<id:\d+>' => 'v1/article/view',
             'PUT v1/articles/<id:\d+>' => 'v1/article/update',
+            'DELETE v1/articles/<id:\d+>' => 'v1/article/delete',
             'GET v1/articles' => 'v1/article/index',
             'POST v1/articles' => 'v1/article/create',
             'GET v1/articles/latest' => 'v1/article/latest',
