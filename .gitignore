@@ -3,3 +3,4 @@ config/db.php
 vendor/
 web/media
 composer.lock
+runtime
