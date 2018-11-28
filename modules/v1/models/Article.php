@@ -3,10 +3,12 @@
 namespace notes\modules\v1\models;
 
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class Article
@@ -24,11 +26,17 @@ class Article extends ActiveRecord
 {
     public $tags;
 
+    /**
+     * @return string
+     */
     public static function tableName()
     {
         return '{{articles}}';
     }
 
+    /**
+     * @return array
+     */
     public function rules()
     {
         return [
@@ -36,9 +44,13 @@ class Article extends ActiveRecord
         ];
     }
 
+    /**
+     * @return array
+     */
     public function fields()
     {
         $fields = parent::fields();
+        $fields['tags'] = 'tags';
         $fields['created_by_user'] = 'createdByUser';
         $fields['modified_by_user'] = 'modifiedByUser';
         return $fields;
@@ -100,16 +112,28 @@ class Article extends ActiveRecord
         return $articles;
     }
 
-    public function getCreatedByUser()
+    /**
+     * @return void
+     */
+    public function loadTagNames()
     {
-        return $this->hasOne(User::class, ['id' => 'created_by']);
+        $tags = Tag::find()
+            ->select(['id', 'name'])
+            ->where(['in', 'id', explode(',', $this->tag_ids)])
+            ->orderBy('name DESC')
+            ->asArray()
+            ->all();
+
+        foreach ($tags as $tag) {
+            $this->tags[] = $tag['name'];
+        }
     }
 
-    public function getModifiedByUser()
-    {
-        return $this->hasOne(User::class, ['id' => 'modified_by']);
-    }
-
+    /**
+     * @param string $q
+     * @param array $tags
+     * @return ActiveDataProvider
+     */
     public static function findAllAsProvider($q = '', array $tags = [])
     {
         $query = new Query;
@@ -170,6 +194,29 @@ class Article extends ActiveRecord
         return $dataProvider;
     }
 
+    /**
+     * @return ActiveQuery
+     */
+    public function getCreatedByUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getModifiedByUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'modified_by']);
+    }
+
+    /**
+     * @param string $tags
+     * @param int $articleId
+     * @param int $userId
+     * @param array $oldTagIds
+     * @throws ServerErrorHttpException
+     */
     private function saveTags(string $tags, int $articleId, int $userId, array $oldTagIds)
     {
         // Tags in Tabelle speichern
@@ -188,6 +235,10 @@ class Article extends ActiveRecord
         Tag::deleteAll('frequency <= 0');
     }
 
+    /**
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -202,6 +253,11 @@ class Article extends ActiveRecord
         return false;
     }
 
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     * @throws ServerErrorHttpException
+     */
     public function afterSave($insert, $changedAttributes)
     {
         $oldTagIds = [];
@@ -212,6 +268,9 @@ class Article extends ActiveRecord
         $this->saveTags($this->tags, $this->id, 99, $oldTagIds);
     }
 
+    /**
+     * @return bool
+     */
     public function beforeDelete()
     {
         if (!parent::beforeDelete()) {

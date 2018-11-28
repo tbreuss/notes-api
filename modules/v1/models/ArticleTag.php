@@ -15,6 +15,9 @@ use yii\web\ServerErrorHttpException;
  */
 class ArticleTag extends ActiveRecord
 {
+    /**
+     * @return string
+     */
     public static function tableName()
     {
         return '{{article_to_tag}}';
@@ -27,13 +30,11 @@ class ArticleTag extends ActiveRecord
      */
     public static function saveTags(int $articleId, array $tagIds)
     {
-        static::deleteAll(
-            'article_id = :articleId AND tag_id NOT IN (:tagIds)',
-            [
-            'articleId' => $articleId,
-            'tagIds' => $tagIds
-            ]
-        );
+        if (empty($tagIds)) {
+            return;
+        }
+
+        static::deleteAll(['and', ['article_id' => $articleId], ['not in', 'tag_id' => $tagIds]]);
 
         foreach ($tagIds as $tagId) {
             $model = static::findOne(['article_id' => $articleId, 'tag_id' => $tagId]);
@@ -48,6 +49,10 @@ class ArticleTag extends ActiveRecord
         }
     }
 
+    /**
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {

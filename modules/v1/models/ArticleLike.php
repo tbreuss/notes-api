@@ -14,11 +14,18 @@ use yii\db\Expression;
  */
 class ArticleLike extends ActiveRecord
 {
+    /**
+     * @return string
+     */
     public static function tableName()
     {
         return '{{article_likes}}';
     }
 
+    /**
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {

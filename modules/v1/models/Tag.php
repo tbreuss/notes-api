@@ -4,6 +4,7 @@ namespace notes\modules\v1\models;
 
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\db\Expression;
 use yii\web\ServerErrorHttpException;
 
@@ -18,11 +19,17 @@ use yii\web\ServerErrorHttpException;
  */
 class Tag extends ActiveRecord
 {
+    /**
+     * @return string
+     */
     public static function tableName()
     {
         return '{{tags}}';
     }
 
+    /**
+     * @return array
+     */
     public function rules()
     {
         return [
@@ -44,6 +51,11 @@ class Tag extends ActiveRecord
         return $provider;
     }
 
+    /**
+     * @param string $q
+     * @param array $tags
+     * @return array
+     */
     public static function findAllSelected(string $q = '', array $tags = [])
     {
         $query = static::find()
@@ -70,7 +82,13 @@ class Tag extends ActiveRecord
         return $tags;
     }
 
-    public static function saveAll($tags, $userId)
+    /**
+     * @param string $tags
+     * @param int $userId
+     * @return array
+     * @throws ServerErrorHttpException
+     */
+    public static function saveAll(string $tags, int $userId)
     {
         // remove doublettes
         $tags = static::explodeTags($tags);
@@ -94,6 +112,10 @@ class Tag extends ActiveRecord
         return $ids;
     }
 
+    /**
+     * @param string $tagsCsv
+     * @return array
+     */
     private static function explodeTags(string $tagsCsv): array
     {
         $tags = explode(',', $tagsCsv);
@@ -102,12 +124,21 @@ class Tag extends ActiveRecord
         return $unique;
     }
 
-    private static function arrayIunique($array)
+    /**
+     * @param array $array
+     * @return array
+     */
+    private static function arrayIunique(array $array)
     {
         $lowered = array_map('strtolower', $array);
         return array_intersect_key($array, array_unique($lowered));
     }
 
+    /**
+     * @param array $ids
+     * @return int
+     * @throws Exception
+     */
     public static function updateFrequencies(array $ids)
     {
         if (empty($ids)) {
@@ -124,11 +155,16 @@ class Tag extends ActiveRecord
             )
             WHERE id IN (:ids);
         ";
-        $num = \Yii::$app->db->createCommand($sql, ['ids' => $ids])
-            ->execute();
+        $sql = \Yii::$app->db->createCommand($sql, ['ids' => $ids])->rawSql;
+        // does'n work in one shot (~ strange)
+        $num = \Yii::$app->db->createCommand($sql)->execute();
         return $num;
     }
 
+    /**
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {

@@ -31,7 +31,7 @@ class UserController extends Controller
             return ExitCode::OK;
         }
 
-        echo Console::errorSummary($user) . "\n";
+        echo Console::errorSummary($user) . PHP_EOL;
         return ExitCode::UNSPECIFIED_ERROR;
     }
 
@@ -55,7 +55,7 @@ class UserController extends Controller
             return ExitCode::OK;
         }
 
-        echo Console::errorSummary($user) . "\n";
+        echo Console::errorSummary($user) . PHP_EOL;
         return ExitCode::UNSPECIFIED_ERROR;
     }
 }

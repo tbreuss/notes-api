@@ -14,11 +14,18 @@ use yii\db\Expression;
  */
 class ArticleView extends ActiveRecord
 {
+    /**
+     * @return string
+     */
     public static function tableName()
     {
         return '{{article_views}}';
     }
 
+    /**
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {

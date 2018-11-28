@@ -2,10 +2,14 @@
 
 namespace notes\modules\v1;
 
+use yii\base\Application;
 use yii\base\BootstrapInterface;
 
 class Module extends \yii\base\Module implements BootstrapInterface
 {
+    /**
+     * @param Application $app
+     */
     public function bootstrap($app)
     {
         $app->getUrlManager()->addRules([

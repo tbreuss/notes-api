@@ -3,6 +3,7 @@
 namespace notes\modules\v1\models;
 
 use Firebase\JWT\JWT;
+use yii\base\Exception;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -31,11 +32,17 @@ class User extends ActiveRecord implements IdentityInterface
     const SCENARIO_CREATE = 'create';
     const SCENARIO_RENEW_PASSWORD = 'renewPassword';
 
+    /**
+     * @return string
+     */
     public static function tableName()
     {
         return '{{users}}';
     }
 
+    /**
+     * @return array
+     */
     public function fields()
     {
         $fields = parent::fields();
@@ -50,6 +57,9 @@ class User extends ActiveRecord implements IdentityInterface
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function rules()
     {
         return [
@@ -74,11 +84,20 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    /**
+     * @param int $id
+     * @return User|null
+     */
     public static function findIdentity($id)
     {
         return static::findOne($id);
     }
 
+    /**
+     * @param string $token
+     * @param string $type
+     * @return User|null
+     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         return static::findOne([
@@ -87,21 +106,34 @@ class User extends ActiveRecord implements IdentityInterface
         ]);
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null
+     */
     public function getAuthKey()
     {
         return null;
     }
 
+    /**
+     * @param string $authKey
+     * @return bool
+     */
     public function validateAuthKey($authKey)
     {
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function generateToken(): string
     {
         $payload = [
@@ -120,11 +152,19 @@ class User extends ActiveRecord implements IdentityInterface
         return $jwt;
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function generateSalt()
     {
         return \Yii::$app->security->generateRandomString();
     }
 
+    /**
+     * @param $username
+     * @return User|null
+     */
     public static function findByUsername($username)
     {
         return static::findOne([
@@ -133,11 +173,20 @@ class User extends ActiveRecord implements IdentityInterface
         ]);
     }
 
+    /**
+     * @param string $password
+     * @return bool
+     */
     public function validatePassword(string $password): bool
     {
         return $this->hashPassword($password, $this->salt) === $this->password;
     }
 
+    /**
+     * @param string $password
+     * @param string $salt
+     * @return string
+     */
     public function hashPassword(string $password, string $salt): string
     {
         return md5($salt . $password);
@@ -160,6 +209,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @param bool $insert
      * @return bool
+     * @throws Exception
      */
     public function beforeSave($insert)
     {

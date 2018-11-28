@@ -26,7 +26,8 @@ class ArticleController extends Controller
     {
         // TODO return validation errors together with 400 status code
         $model = new Article();
-        $model->load(\Yii::$app->getRequest()->getBodyParams(), '');
+        $data = \Yii::$app->getRequest()->getBodyParams();
+        $model->load($data, '');
         if ($model->save()) {
             $response = \Yii::$app->getResponse();
             $response->setStatusCode(201);
@@ -58,6 +59,7 @@ class ArticleController extends Controller
         if (!$model) {
             throw new NotFoundHttpException("Article $id not found");
         }
+        $model->loadTagNames();
         $model->updateCounters(['views' => 1]);
         return $model;
     }
