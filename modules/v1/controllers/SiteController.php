@@ -6,6 +6,7 @@ use notes\components\BehaviorsTrait;
 use notes\modules\v1\models\User;
 use yii\rest\Controller;
 use yii\web\ForbiddenHttpException;
+use yii\web\HttpException;
 
 class SiteController extends Controller
 {
@@ -25,7 +26,11 @@ class SiteController extends Controller
         $post = \Yii::$app->request->post();
         $model = User::findByUsername($post['username']);
         if (empty($model)) {
-            throw new ForbiddenHttpException('Incorrect username or password.');
+            \Yii::$app->getResponse()->setStatusCode(422);
+            return [
+                'username' => 'Benutzername/Passwort falsch',
+                'password' => 'Benutzername/Passwort falsch'
+            ];
         }
         if ($model->validatePassword($post["password"])) {
             $token = $model->generateToken();
@@ -33,6 +38,10 @@ class SiteController extends Controller
             $model->save(false);
             return $token;
         }
-        throw new ForbiddenHttpException('Incorrect username or password.');
+        \Yii::$app->getResponse()->setStatusCode(422);
+        return [
+            'username' => 'Benutzername/Passwort falsch',
+            'password' => 'Benutzername/Passwort falsch'
+        ];
     }
 }

@@ -5,6 +5,7 @@ namespace notes\modules\v1\models;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
@@ -216,6 +217,7 @@ class Article extends ActiveRecord
      * @param int $userId
      * @param array $oldTagIds
      * @throws ServerErrorHttpException
+     * @throws Exception
      */
     private function saveTags(string $tags, int $articleId, int $userId, array $oldTagIds)
     {
@@ -270,6 +272,7 @@ class Article extends ActiveRecord
 
     /**
      * @return bool
+     * @throws Exception
      */
     public function beforeDelete()
     {

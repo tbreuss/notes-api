@@ -34,7 +34,7 @@ class ArticleTag extends ActiveRecord
             return;
         }
 
-        static::deleteAll(['and', ['article_id' => $articleId], ['not in', 'tag_id' => $tagIds]]);
+        static::deleteAll(['and', ['article_id' => $articleId], ['not in', 'tag_id', $tagIds]]);
 
         foreach ($tagIds as $tagId) {
             $model = static::findOne(['article_id' => $articleId, 'tag_id' => $tagId]);
