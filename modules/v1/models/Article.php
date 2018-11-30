@@ -141,7 +141,7 @@ class Article extends ActiveRecord
 
         $query->select('a.id, a.title AS title, GROUP_CONCAT(t.name) AS tags, a.created, a.modified, a.views');
         $query->from('articles a');
-        $query->innerJoin('tags t', 'FIND_IN_SET(t.id, a.tag_ids)');
+        $query->innerJoin('tags t', 'FIND_IN_SET(t.id, a.tag_ids)>0');
         $query->groupBy('a.id');
 
         if (!empty($q)) {
@@ -149,8 +149,9 @@ class Article extends ActiveRecord
         }
 
         if (!empty($tags)) {
-            foreach ($tags as $tag) {
-                $query->andWhere('FIND_IN_SET(:tag_id, a.tag_ids)>0', ['tag_id' => $tag]);
+            foreach ($tags as $i => $tag) {
+                $key = 'tag_id_' . $i;
+                $query->andWhere("FIND_IN_SET(:${key}, a.tag_ids)>0", [$key => $tag]);
             }
         }
 

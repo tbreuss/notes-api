@@ -6,6 +6,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\Expression;
+use yii\db\Query;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -42,11 +43,38 @@ class Tag extends ActiveRecord
      */
     public static function findAllAsProvider()
     {
+        $query = new Query;
+        $query->select('t.*');
+        $query->from('tags t');
+
         $provider = new ActiveDataProvider([
-            'query' => static::find(),
+            'query' => $query,
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 1000, // no pagination
             ],
+            'sort' => [
+                'attributes' => [
+                    'name',
+                    'frequency' => [
+                        'asc' => ['t.frequency' => SORT_DESC, 't.name' => SORT_ASC],
+                        'desc' => ['t.frequency' => SORT_ASC, 't.name' => SORT_ASC],
+                        'default' => SORT_DESC
+                    ],
+                    'created' => [
+                        'asc' => ['t.created' => SORT_DESC, 't.name' => SORT_ASC],
+                        'desc' => ['t.created' => SORT_ASC, 't.name' => SORT_ASC],
+                        'default' => SORT_DESC
+                    ],
+                    'changed' => [
+                        'asc' => ['t.modified' => SORT_DESC, 't.name' => SORT_ASC],
+                        'desc' => ['t.modified' => SORT_ASC, 't.name' => SORT_ASC],
+                        'default' => SORT_DESC
+                    ]
+                ],
+                'defaultOrder' => [
+                    'name' => SORT_ASC
+                ]
+            ]
         ]);
         return $provider;
     }
@@ -70,13 +98,15 @@ class Tag extends ActiveRecord
         }
 
         if (!empty($tags)) {
-            foreach ($tags as $tag) {
-                $query->andWhere('FIND_IN_SET(:tag_id, a.tag_ids)>0', ['tag_id' => $tag]);
+            foreach ($tags as $i => $tagId) {
+                $key = 'tag_id_' . $i;
+                $query->andWhere("FIND_IN_SET(:${key}, a.tag_ids)>0", [$key => $tagId]);
             }
         }
 
-        $tags = $query->asArray()
+        $tags = $query
             ->limit(40)
+            ->asArray()
             ->all();
 
         return $tags;

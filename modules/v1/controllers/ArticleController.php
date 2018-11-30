@@ -24,7 +24,6 @@ class ArticleController extends Controller
 
     public function actionCreate()
     {
-        // TODO return validation errors together with 400 status code
         $model = new Article();
         $data = \Yii::$app->getRequest()->getBodyParams();
         $model->load($data, '');
@@ -66,12 +65,12 @@ class ArticleController extends Controller
 
     public function actionUpdate(int $id)
     {
-        // TODO return validation errors together with 400 status code
         $model = Article::findOne($id);
         if (!$model) {
             throw new NotFoundHttpException("Article $id not found");
         }
-        $model->load(\Yii::$app->getRequest()->getBodyParams(), '');
+        $data = \Yii::$app->getRequest()->getBodyParams();
+        $model->load($data, '');
         if ($model->save() === false && !$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to update article for unknown reason.');
         }
