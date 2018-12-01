@@ -100,10 +100,14 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne([
-            'access_token' => $token,
-            'deleted' => 0
-        ]);
+        $key = \Yii::$app->params['jwt.private_key'];
+        try {
+            $decoded = JWT::decode($token, $key, ['HS256']);
+            $user = static::findByUsername($decoded->user->username);
+            return $user;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -137,11 +141,13 @@ class User extends ActiveRecord implements IdentityInterface
     public function generateToken(): string
     {
         $payload = [
-            "iss" => 'ch.tebe.notes',
-            "iat" => time(),
-            //"exp" => time() + (60*60*24),
+            'iss' => 'notes.tebe.ch',
+            'iat' => time(),
+            'nbf' => time(),
+            //'exp' => time() + (60*60*24),
             'user' => [
                 'id' => $this->id,
+                'username' => $this->username,
                 'name' => $this->username,
                 'role' => $this->role,
                 'scopes' => json_decode($this->scopes, true)
@@ -167,10 +173,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne([
+        $user = static::findOne([
             'username' => $username,
             'deleted' => 0
         ]);
+        return $user;
     }
 
     /**

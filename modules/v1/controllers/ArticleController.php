@@ -2,6 +2,7 @@
 
 namespace notes\modules\v1\controllers;
 
+use notes\components\ActionsTrait;
 use notes\components\BehaviorsTrait;
 use notes\modules\v1\models\Article;
 use yii\helpers\FileHelper;
@@ -14,6 +15,7 @@ use yii\web\UploadedFile;
 
 class ArticleController extends Controller
 {
+    use ActionsTrait;
     use BehaviorsTrait;
 
     public function actionIndex($q = '', array $tags = [])

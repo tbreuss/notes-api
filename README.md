@@ -12,7 +12,10 @@ Start webserver:
 Post login
     
     curl -i --header "Content-Type: application/json" --request POST --data '{"username":"xyz","password":"xyz"}' http://localhost:8080/login
-      
+
+
+    curl -i --header "Content-Type: application/json" --request OPTIONS --data '{"username":"xyz","password":"xyz"}' http://localhost:8080/login
+    curl -i -X OPTIONS http://localhost:8888/ --header "Content-Type: application/json"
       
 ## Endpoints
 

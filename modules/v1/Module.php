@@ -15,6 +15,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $app->getUrlManager()->addRules([
             'GET v1/ping' => 'v1/site/ping',
             'POST v1/login' => 'v1/site/login',
+            'v1/ping' => 'v1/site/options',
+            'v1/login' => 'v1/site/options',
+
             // articles
             'GET v1/articles/<id:\d+>' => 'v1/article/view',
             'PUT v1/articles/<id:\d+>' => 'v1/article/update',
@@ -26,13 +29,28 @@ class Module extends \yii\base\Module implements BootstrapInterface
             'GET v1/articles/modified' => 'v1/article/modified',
             'GET v1/articles/popular' => 'v1/article/popular',
             'POST v1/articles/upload' => 'v1/article/upload',
+            'v1/articles/<id:\d+>' => 'v1/article/options',
+            'v1/articles' => 'v1/article/options',
+            'v1/articles/latest' => 'v1/article/options',
+            'v1/articles/liked' => 'v1/article/options',
+            'v1/articles/modified' => 'v1/article/options',
+            'v1/articles/popular' => 'v1/article/options',
+            'v1/articles/upload' => 'v1/article/options',
+
             // users
             'GET v1/users/<id:\d+>' => 'v1/user/view',
             'GET v1/users' => 'v1/user/index',
+            'v1/users/<id:\d+>' => 'v1/user/options',
+            'v1/users' => 'v1/user/options',
+
             // tags
             'GET v1/tags/<id:\d+>' => 'v1/tag/view',
             'GET v1/tags' => 'v1/tag/index',
             'GET v1/tags/selected' => 'v1/tag/selected',
+            'v1/tags/<id:\d+>' => 'v1/tag/options',
+            'v1/tags' => 'v1/tag/options',
+            'v1/tags/selected' => 'v1/tag/options',
+
         ], false);
     }
 }

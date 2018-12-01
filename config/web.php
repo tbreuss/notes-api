@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 return [
     'id' => 'ch.tebe.notes',
+    'language' => 'de',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'notes\controllers',
     'aliases' => [
@@ -52,7 +53,7 @@ return [
             ],
         ],
         'user' => [
-            'identityClass' => 'notes\models\User',
+            'identityClass' => 'notes\modules\v1\models\User',
             'enableAutoLogin' => false,
             'enableSession' => false
         ],

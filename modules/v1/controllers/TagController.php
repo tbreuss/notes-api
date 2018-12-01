@@ -2,6 +2,7 @@
 
 namespace notes\modules\v1\controllers;
 
+use notes\components\ActionsTrait;
 use notes\components\BehaviorsTrait;
 use notes\modules\v1\models\Tag;
 use yii\rest\Controller;
@@ -9,6 +10,7 @@ use yii\web\NotFoundHttpException;
 
 class TagController extends Controller
 {
+    use ActionsTrait;
     use BehaviorsTrait;
 
     public function actionIndex()
