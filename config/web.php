@@ -47,7 +47,7 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'enableStrictParsing' => true,
-            'showScriptName' => true,
+            'showScriptName' => false,
             'rules' => [
                 'GET /' => 'site/index'
             ],

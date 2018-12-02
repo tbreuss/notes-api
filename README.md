@@ -1,14 +1,9 @@
 # notes-server-yii2
 
-
 Start webserver:
 
     php yii serve -p 8888
     
-    
-    
-    
-
 Post login
     
     curl -i --header "Content-Type: application/json" --request POST --data '{"username":"xyz","password":"xyz"}' http://localhost:8080/login
@@ -17,7 +12,7 @@ Post login
       
 ## Endpoints
 
-### GET v1/echo
+### GET v1/ping
 
 ### POST v1/login
 
@@ -50,4 +45,3 @@ Post login
 ### GET v1/tags
 
 ### GET v1/tags/selected
-

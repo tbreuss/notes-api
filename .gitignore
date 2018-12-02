@@ -1,4 +1,5 @@
 .idea/
+build/
 config/db.php
 vendor/
 web/media

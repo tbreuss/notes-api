@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="notes-server" basedir="." default="help">
+
+    <!-- directory definitions -->
+    <property name="build.base.dir" value="build"/>
+    <property name="build.dist.dir" value="dist"/>
+    <property name="build.src.dir" value="${build.base.dir}/src"/>
+    <property name="src.dir" value="."/>
+
+    <tstamp>
+        <format property="date" pattern="%Y-%m-%d"/>
+    </tstamp>
+
+    <!-- source files in the framework -->
+    <fileset dir="${build.src.dir}" id="app">
+        <include name="commands/**/*"/>
+        <include name="components/**/*"/>
+        <include name="config/**/*"/>
+        <include name="controllers/**/*"/>
+        <include name="models/**/*"/>
+        <include name="modules/**/*"/>
+        <include name="vendor/**/*"/>
+        <include name="web/**/*"/>
+        <include name="yii"/>
+    </fileset>
+
+    <target name="src" description="Building source release">
+        <echo>Building source release...</echo>
+
+        <!-- clone repository -->
+        <mkdir dir="${build.base.dir}"/>
+        <exec command="git clone https://github.com/tbreuss/notes-server-yii2.git src" dir="${build.base.dir}"/>
+
+        <!-- composer install -->
+        <composer command="install" composer="/usr/local/bin/composer">
+            <arg value="--no-dev"/>
+            <arg value="-o"/>
+            <arg value="--working-dir=${build.src.dir}"/>
+        </composer>
+
+        <!-- composer dump autoload -->
+        <composer command="dump-autoload" composer="/usr/local/bin/composer">
+            <arg value="--working-dir=${build.src.dir}"/>
+        </composer>
+
+        <copy todir="${build.src.dir}">
+            <fileset dir="${src.dir}">
+                <include name="config/prod.env.php"/>
+            </fileset>
+        </copy>
+
+        <mkdir dir="${build.base.dir}"/>
+        <zip destfile="${build.base.dir}/notes-server-${date}.zip">
+            <fileset refid="app"/>
+        </zip>
+
+        <delete dir="${build.src.dir}"/>
+
+    </target>
+
+    <target name="clean" description="Cleaning up the build">
+        <echo>Cleaning up the build...</echo>
+        <delete dir="${build.base.dir}"/>
+    </target>
+
+    <target name="help">
+        <echo>
+            Welcome to this (simple) build script
+            -------------------------------------
+            You may use the following command format to build a target:
+
+            phing &lt;target name&gt;
+
+            where &lt;target name&gt; can be one of the following:
+
+            - src : build source release
+            - clean : clean up the build
+        </echo>
+    </target>
+</project>
