@@ -1,6 +1,7 @@
 .idea/
 build/
 config/db.php
+config/params.php
 vendor/
 web/media
 composer.lock
