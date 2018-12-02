@@ -43,7 +43,7 @@ class UserController extends Controller
      */
     public function actionPassword(string $username, string $password)
     {
-        $user = User::findByUsername($username);
+        $user = User::findOne(['username' => $username]);
         if (empty($user)) {
             return ExitCode::NOUSER;
         }

@@ -16,7 +16,6 @@ use yii\web\IdentityInterface;
  * @property int id
  * @property string username
  * @property string password
- * @property string salt
  * @property string name
  * @property string email
  * @property string role
@@ -49,9 +48,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         // remove fields that contain sensitive information
         unset(
-            $fields['password'],
-            $fields['salt'],
-            $fields['access_token']
+            $fields['password']
         );
 
         return $fields;
@@ -90,7 +87,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne($id);
+        $user = static::findOne([
+            'id' => $id,
+            'deleted' => 0
+        ]);
+        return $user;
     }
 
     /**
@@ -138,7 +139,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return string
      */
-    public function generateToken(): string
+    public function generateAccessToken(): string
     {
         $payload = [
             'iss' => 'notes.tebe.ch',
@@ -156,15 +157,6 @@ class User extends ActiveRecord implements IdentityInterface
         $key = \Yii::$app->params['jwt.private_key'];
         $jwt = JWT::encode($payload, $key, 'HS256');
         return $jwt;
-    }
-
-    /**
-     * @return string
-     * @throws Exception
-     */
-    public function generateSalt()
-    {
-        return \Yii::$app->security->generateRandomString();
     }
 
     /**
@@ -186,17 +178,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validatePassword(string $password): bool
     {
-        return $this->hashPassword($password, $this->salt) === $this->password;
-    }
-
-    /**
-     * @param string $password
-     * @param string $salt
-     * @return string
-     */
-    public function hashPassword(string $password, string $salt): string
-    {
-        return md5($salt . $password);
+        return \Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
 
     /**
@@ -223,8 +205,7 @@ class User extends ActiveRecord implements IdentityInterface
         if (parent::beforeSave($insert)) {
             if ($this->getScenario() === static::SCENARIO_CREATE) {
                 if ($this->isNewRecord) {
-                    $this->salt = $this->generateSalt();
-                    $this->password = $this->hashPassword($this->password, $this->salt);
+                    $this->password = \Yii::$app->getSecurity()->generatePasswordHash($this->password);
                     $this->created = new Expression('NOW()');
                 } else {
                     $this->modified = new Expression('NOW()');
@@ -232,8 +213,7 @@ class User extends ActiveRecord implements IdentityInterface
             }
             if ($this->getScenario() === static::SCENARIO_RENEW_PASSWORD) {
                 if (!$this->isNewRecord) {
-                    $this->salt = $this->generateSalt();
-                    $this->password = $this->hashPassword($this->password, $this->salt);
+                    $this->password = \Yii::$app->getSecurity()->generatePasswordHash($this->password);
                     $this->modified = new Expression('NOW()');
                 }
             }

@@ -130,7 +130,7 @@ class ArticleController extends Controller
 
         $basename = md5_file($file->tempName);
         if ($basename === false) {
-            throw new ServerErrorHttpException('Could not create md5 sum');
+            throw new ServerErrorHttpException('Could not create md5 sum from file');
         }
 
         // determine path and url

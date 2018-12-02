@@ -12,7 +12,9 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return [
-            'name' => 'ch.tebe.notes'
+            'name' => 'ch.tebe.notes',
+            'time' => date('c'),
+            'version' => '0.5'
         ];
     }
 

@@ -12,12 +12,10 @@ class SiteController extends Controller
     use ActionsTrait;
     use BehaviorsTrait;
 
-    public function actionPing()
+    public function actionEcho($what)
     {
         return [
-            'name' => 'ch.tebe.notes',
-            'time' => date('c'),
-            'version' => '0.5'
+            'value' => $what
         ];
     }
 
@@ -35,7 +33,7 @@ class SiteController extends Controller
         if ($model->validatePassword($post["password"])) {
             $model->lastlogin = date('Y-m-d H:i:s');
             $model->save(false);
-            $token = $model->generateToken();
+            $token = $model->generateAccessToken();
             return $token;
         }
         \Yii::$app->getResponse()->setStatusCode(422);
