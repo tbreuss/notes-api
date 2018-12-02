@@ -13,9 +13,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public function bootstrap($app)
     {
         $app->getUrlManager()->addRules([
-            'GET v1/echo' => 'v1/site/echo',
+            'GET v1/ping' => 'v1/site/ping',
             'POST v1/login' => 'v1/site/login',
-            'v1/echo' => 'v1/site/options',
+            'v1/ping' => 'v1/site/options',
             'v1/login' => 'v1/site/options',
 
             // articles

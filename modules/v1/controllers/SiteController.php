@@ -12,10 +12,12 @@ class SiteController extends Controller
     use ActionsTrait;
     use BehaviorsTrait;
 
-    public function actionEcho($what)
+    public function actionPing()
     {
         return [
-            'value' => $what
+            'name' => 'ch.tebe.notes',
+            'time' => date('c'),
+            'version' => '0.5'
         ];
     }
 

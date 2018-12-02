@@ -12,9 +12,10 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return [
-            'name' => 'ch.tebe.notes',
-            'time' => date('c'),
-            'version' => '0.5'
+            'title' => 'REST-API for Notes Management Tool',
+            'info' => 'You need an appropriate client to access this API',
+            'github' => 'https://github.com/tbreuss/notes-client',
+            'url' => 'https://notes.tebe.ch',
         ];
     }
 
