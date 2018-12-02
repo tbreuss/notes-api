@@ -16,7 +16,9 @@ use yii\web\ServerErrorHttpException;
  * @property string name
  * @property int frequency
  * @property string created
+ * @property int created_by
  * @property string modified
+ * @property int modified_by
  */
 class Tag extends ActiveRecord
 {
@@ -200,8 +202,10 @@ class Tag extends ActiveRecord
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
                 $this->created = new Expression('NOW()');
+                $this->created_by = \Yii::$app->user->id;
             } else {
                 $this->modified = new Expression('NOW()');
+                $this->modified_by = \Yii::$app->user->id;
             }
             return true;
         }

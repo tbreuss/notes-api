@@ -44,5 +44,4 @@ class SiteController extends Controller
             'password' => 'Benutzername/Passwort falsch'
         ];
     }
-
 }

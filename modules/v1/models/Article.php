@@ -21,7 +21,9 @@ use yii\web\ServerErrorHttpException;
  * @property int views
  * @property int likes
  * @property string created
+ * @property int created_by
  * @property string modified
+ * @property int modified_by
  */
 class Article extends ActiveRecord
 {
@@ -248,8 +250,10 @@ class Article extends ActiveRecord
             $this->tag_ids = ''; // we handle this in afterSave
             if ($this->isNewRecord) {
                 $this->created = new Expression('NOW()');
+                $this->created_by = \Yii::$app->user->id;
             } else {
                 $this->modified = new Expression('NOW()');
+                $this->modified_by = \Yii::$app->user->id;
             }
             return true;
         }
@@ -268,7 +272,8 @@ class Article extends ActiveRecord
             $oldTagIds = explode(',', $changedAttributes['tag_ids']);
         }
 
-        $this->saveTags($this->tags, $this->id, 99, $oldTagIds);
+        $userId = \Yii::$app->user->id;
+        $this->saveTags($this->tags, $this->id, $userId, $oldTagIds);
     }
 
     /**
