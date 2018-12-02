@@ -43,6 +43,7 @@ trait BehaviorsTrait
             'class' => HttpBearerAuth::class,
             'except' => [
                 'index',
+                'error',
                 'ping',
                 'login',
                 'options'
