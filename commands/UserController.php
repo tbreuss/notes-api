@@ -2,7 +2,7 @@
 
 namespace notes\commands;
 
-use notes\modules\v1\models\User;
+use notes\models\User;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\Console;

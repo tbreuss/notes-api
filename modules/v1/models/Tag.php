@@ -177,6 +177,8 @@ class Tag extends ActiveRecord
             return 0;
         }
 
+        // we do this because PDO has no built in Array binding
+        $placeholders = str_repeat('?,', count($ids) - 1). '?';
         $sql = "
             UPDATE tags
             SET frequency = (
@@ -185,11 +187,14 @@ class Tag extends ActiveRecord
                 WHERE tags.id = article_to_tag.tag_id
                 GROUP BY tag_id
             )
-            WHERE id IN (:ids);
+            WHERE id IN ($placeholders);
         ";
-        $sql = \Yii::$app->db->createCommand($sql, ['ids' => $ids])->rawSql;
-        // does'n work in one shot (~ strange)
-        $num = \Yii::$app->db->createCommand($sql)->execute();
+        $command = \Yii::$app->db->createCommand($sql);
+        foreach ($ids as $i => $id) {
+            $command->bindValue($i+1, $id);
+        }
+
+        $num = $command->execute();
         return $num;
     }
 

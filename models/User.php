@@ -1,6 +1,6 @@
 <?php
 
-namespace notes\modules\v1\models;
+namespace notes\models;
 
 use Firebase\JWT\JWT;
 use yii\base\Exception;

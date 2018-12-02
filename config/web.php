@@ -53,7 +53,7 @@ return [
             ],
         ],
         'user' => [
-            'identityClass' => 'notes\modules\v1\models\User',
+            'identityClass' => 'notes\models\User',
             'enableAutoLogin' => false,
             'enableSession' => false
         ],

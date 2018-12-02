@@ -29,7 +29,7 @@ class ArticleController extends Controller
         $model = new Article();
         $data = \Yii::$app->getRequest()->getBodyParams();
         $model->load($data, '');
-        if ($model->save()) {
+        if ($model->insert()) {
             $response = \Yii::$app->getResponse();
             $response->setStatusCode(201);
             $response->getHeaders()->set('Location', Url::toRoute(['article/view', 'id' => $model->id], true));
@@ -73,7 +73,7 @@ class ArticleController extends Controller
         }
         $data = \Yii::$app->getRequest()->getBodyParams();
         $model->load($data, '');
-        if ($model->save() === false && !$model->hasErrors()) {
+        if ($model->update() === false && !$model->hasErrors()) {
             throw new ServerErrorHttpException('Failed to update article for unknown reason.');
         }
         return $model;
@@ -101,7 +101,7 @@ class ArticleController extends Controller
 
     public function actionUpload()
     {
-        $userId = 99;
+        $userId = \Yii::$app->user->id;
 
         $file = UploadedFile::getInstanceByName('file');
 

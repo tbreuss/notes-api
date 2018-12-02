@@ -2,6 +2,7 @@
 
 namespace notes\modules\v1\models;
 
+use notes\models\User;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -234,7 +235,8 @@ class Article extends ActiveRecord
         Article::updateAll(['tag_ids' => implode(',', $tagIds)], ['id' => $articleId]);
 
         // Counter in Tags aktualisieren
-        Tag::updateFrequencies(array_merge($tagIds, $oldTagIds));
+        $oldAndNewTagIds = array_merge($tagIds, $oldTagIds);
+        Tag::updateFrequencies($oldAndNewTagIds);
 
         // Tags mit Counter=0 entfernen
         Tag::deleteAll('frequency <= 0');

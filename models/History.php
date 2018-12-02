@@ -1,10 +1,8 @@
 <?php
 
-namespace notes\modules\v1\models;
+namespace notes\models;
 
 use yii\db\ActiveRecord;
-use yii\db\Expression;
-use yii\web\ServerErrorHttpException;
 
 /**
  * Class History
