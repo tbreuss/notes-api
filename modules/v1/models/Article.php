@@ -2,6 +2,7 @@
 
 namespace notes\modules\v1\models;
 
+use notes\models\History;
 use notes\models\User;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
