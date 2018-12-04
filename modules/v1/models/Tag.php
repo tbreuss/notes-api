@@ -1,6 +1,6 @@
 <?php
 
-namespace notes\modules\v1\models;
+namespace app\modules\v1\models;
 
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
@@ -11,7 +11,7 @@ use yii\web\ServerErrorHttpException;
 
 /**
  * Class Tag
- * @package notes\modules\v1\models
+ * @package app\modules\v1\models
  * @property int id
  * @property string name
  * @property int frequency

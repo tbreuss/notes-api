@@ -1,9 +1,9 @@
 <?php
 
-namespace notes\modules\v1\models;
+namespace app\modules\v1\models;
 
-use notes\models\History;
-use notes\models\User;
+use app\models\History;
+use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -15,7 +15,7 @@ use yii\web\ServerErrorHttpException;
 
 /**
  * Class Article
- * @package notes\modules\v1\models
+ * @package app\modules\v1\models
  * @property int id
  * @property string title
  * @property string content

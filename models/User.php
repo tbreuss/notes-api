@@ -1,6 +1,6 @@
 <?php
 
-namespace notes\models;
+namespace app\models;
 
 use Firebase\JWT\JWT;
 use yii\base\Exception;
@@ -11,7 +11,7 @@ use yii\web\IdentityInterface;
 
 /**
  * Class User
- * @package notes\models
+ * @package app\models
  * @see https://stackoverflow.com/questions/25327476/implementing-an-restful-api-authentication-using-tokens-yii-yii2
  * @property int id
  * @property string username

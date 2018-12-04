@@ -1,6 +1,6 @@
 <?php
 
-namespace notes\components;
+namespace app\components;
 
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\Cors;

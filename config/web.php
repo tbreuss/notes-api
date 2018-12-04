@@ -7,9 +7,8 @@ return [
     'id' => 'ch.tebe.notes',
     'language' => 'de',
     'basePath' => dirname(__DIR__),
-    'controllerNamespace' => 'notes\controllers',
+    'controllerNamespace' => 'app\controllers',
     'aliases' => [
-        '@notes' => dirname(__DIR__),
     ],
     'bootstrap' => [
         'log',
@@ -17,7 +16,7 @@ return [
     ],
     'modules' => [
         'v1' => [
-            'class' => 'notes\modules\v1\Module',
+            'class' => 'app\modules\v1\Module',
         ]
     ],
     'components' => [
@@ -53,7 +52,7 @@ return [
             ],
         ],
         'user' => [
-            'identityClass' => 'notes\models\User',
+            'identityClass' => 'app\models\User',
             'enableAutoLogin' => false,
             'enableSession' => false
         ],

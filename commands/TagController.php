@@ -1,6 +1,6 @@
 <?php
 
-namespace notes\commands;
+namespace app\commands;
 
 use yii\console\Controller;
 use yii\console\ExitCode;

@@ -1,6 +1,6 @@
 <?php
 
-namespace notes\modules\v1;
+namespace app\modules\v1;
 
 use yii\base\Application;
 use yii\base\BootstrapInterface;

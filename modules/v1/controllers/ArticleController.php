@@ -1,10 +1,10 @@
 <?php
 
-namespace notes\modules\v1\controllers;
+namespace app\modules\v1\controllers;
 
-use notes\components\ActionsTrait;
-use notes\components\BehaviorsTrait;
-use notes\modules\v1\models\Article;
+use app\components\ActionsTrait;
+use app\components\BehaviorsTrait;
+use app\modules\v1\models\Article;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
 use yii\rest\Controller;

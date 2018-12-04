@@ -1,12 +1,12 @@
 <?php
 
-namespace notes\models;
+namespace app\models;
 
 use yii\db\ActiveRecord;
 
 /**
  * Class History
- * @package notes\modules\v1\models
+ * @package app\modules\v1\models
  */
 class History extends ActiveRecord
 {

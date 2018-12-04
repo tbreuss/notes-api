@@ -1,8 +1,8 @@
 <?php
 
-namespace notes\commands;
+namespace app\commands;
 
-use notes\models\User;
+use app\models\User;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\Console;

@@ -1,13 +1,13 @@
 <?php
 
-namespace notes\modules\v1\models;
+namespace app\modules\v1\models;
 
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
 /**
  * Class ArticleView
- * @package notes\modules\v1\models
+ * @package app\modules\v1\models
  * @property int article_id
  * @property int tag_id
  * @property string created

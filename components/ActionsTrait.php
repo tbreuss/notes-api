@@ -1,6 +1,6 @@
 <?php
 
-namespace notes\components;
+namespace app\components;
 
 use yii\rest\OptionsAction;
 

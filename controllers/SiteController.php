@@ -1,8 +1,8 @@
 <?php
 
-namespace notes\controllers;
+namespace app\controllers;
 
-use notes\components\BehaviorsTrait;
+use app\components\BehaviorsTrait;
 use yii\rest\Controller;
 
 class SiteController extends Controller

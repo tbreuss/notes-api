@@ -1,10 +1,10 @@
 <?php
 
-namespace notes\modules\v1\controllers;
+namespace app\modules\v1\controllers;
 
-use notes\components\ActionsTrait;
-use notes\components\BehaviorsTrait;
-use notes\models\User;
+use app\components\ActionsTrait;
+use app\components\BehaviorsTrait;
+use app\models\User;
 use yii\rest\Controller;
 
 class SiteController extends Controller
