@@ -301,4 +301,25 @@ class Article extends ActiveRecord
 
         return true;
     }
+
+    public function updateViews()
+    {
+        // Limit to one view per day
+        $model = ArticleView::find()->where([
+            'article_id' => $this->id,
+            'user_id' => \Yii::$app->user->id,
+            'created' => date('Y-m-d')
+        ])->one();
+
+        if (empty($model)) {
+            // Insert into relation table
+            $model = new ArticleView();
+            $model->article_id = $this->id;
+            $model->user_id = \Yii::$app->user->id;
+            $model->insert();
+
+            // Update counter for quick access
+            $this->updateCounters(['views' => 1]);
+        }
+    }
 }

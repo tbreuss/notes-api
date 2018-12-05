@@ -61,7 +61,7 @@ class ArticleController extends Controller
             throw new NotFoundHttpException("Article $id not found");
         }
         $model->loadTagNames();
-        $model->updateCounters(['views' => 1]);
+        $model->updateViews();
         return $model;
     }
 

@@ -9,7 +9,7 @@ use yii\db\Expression;
  * Class ArticleView
  * @package app\modules\v1\models
  * @property int article_id
- * @property int tag_id
+ * @property int user_id
  * @property string created
  */
 class ArticleView extends ActiveRecord
