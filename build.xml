@@ -43,12 +43,6 @@
             <arg value="--working-dir=${build.src.dir}"/>
         </composer>
 
-        <copy todir="${build.src.dir}">
-            <fileset dir="${src.dir}">
-                <include name="config/prod.env.php"/>
-            </fileset>
-        </copy>
-
         <mkdir dir="${build.base.dir}"/>
         <zip destfile="${build.base.dir}/notes-server-${date}.zip">
             <fileset refid="app"/>
