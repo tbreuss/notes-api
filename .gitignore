@@ -2,7 +2,7 @@
 build/
 config/db.php
 config/params.php
-vendor/
-web/media
-composer.lock
 runtime
+vendor/
+web/media/
+composer.lock
