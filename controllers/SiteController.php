@@ -16,6 +16,7 @@ class SiteController extends Controller
             'info' => 'You need an appropriate client to access this API',
             'github' => 'https://github.com/tbreuss/notes-client',
             'url' => 'https://notes.tebe.ch',
+            'version' => '1.0'
         ];
     }
 
