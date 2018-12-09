@@ -38,10 +38,12 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
-            'cookieValidationKey' => 'ZCxc233xJDfhOnRydWV9wZeuweG9lIiwiYWRtaW4i',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser'
-            ]
+            ],
+            'enableCookieValidation' => false,
+            'enableCsrfCookie' => false,
+            'enableCsrfValidation' => false
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
