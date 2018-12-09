@@ -3,7 +3,6 @@
 namespace app\modules\v1\controllers;
 
 use app\components\ActionsTrait;
-use app\components\BehaviorsTrait;
 use app\models\User;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
@@ -11,7 +10,6 @@ use yii\web\NotFoundHttpException;
 class UserController extends Controller
 {
     use ActionsTrait;
-    use BehaviorsTrait;
 
     public function actionIndex()
     {

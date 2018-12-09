@@ -3,7 +3,6 @@
 namespace app\modules\v1\controllers;
 
 use app\components\ActionsTrait;
-use app\components\BehaviorsTrait;
 use app\modules\v1\models\Article;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
@@ -16,7 +15,6 @@ use yii\web\UploadedFile;
 class ArticleController extends Controller
 {
     use ActionsTrait;
-    use BehaviorsTrait;
 
     public function actionIndex($q = '', array $tags = [])
     {

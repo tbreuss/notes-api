@@ -4,6 +4,8 @@ namespace app\modules\v1;
 
 use yii\base\Application;
 use yii\base\BootstrapInterface;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\Cors;
 
 class Module extends \yii\base\Module implements BootstrapInterface
 {
@@ -52,5 +54,46 @@ class Module extends \yii\base\Module implements BootstrapInterface
             'v1/tags/selected' => 'v1/tag/options',
 
         ], false);
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        // remove rateLimiter which requires an authenticated user to work
+        unset($behaviors['rateLimiter']);
+
+        // remove authentication filter
+        unset($behaviors['authenticator']);
+
+        $behaviors['corsFilter'] = [
+            'class' => Cors::class,
+            'cors' => [
+                'Origin' => ['*'],
+                #'Access-Control-Allow-Origin' => ['*'],
+                'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                'Access-Control-Request-Headers' => ['*'],
+                #'Access-Control-Allow-Credentials' => null,
+                'Access-Control-Max-Age' => 86400,
+                'Access-Control-Expose-Headers' => [
+                    'X-Pagination-Current-Page',
+                    'X-Pagination-Page-Count',
+                    'X-Pagination-Per-Page',
+                    'X-Pagination-Total-Count'
+                ],
+            ]
+        ];
+
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::class,
+            'except' => [
+                'site/*',
+                'article/options',
+                'tag/options',
+                'user/options',
+            ]
+        ];
+
+        return $behaviors;
     }
 }

@@ -3,14 +3,12 @@
 namespace app\modules\v1\controllers;
 
 use app\components\ActionsTrait;
-use app\components\BehaviorsTrait;
 use app\models\User;
 use yii\rest\Controller;
 
 class SiteController extends Controller
 {
     use ActionsTrait;
-    use BehaviorsTrait;
 
     public function actionPing()
     {
