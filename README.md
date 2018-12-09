@@ -1,14 +1,16 @@
-# Notes Management Tool – REST-Server
+# Notes Management Tool – REST-API
 
-The REST-API Server for the Notes Management Tool.
+[![Yii](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](http://www.yiiframework.com/)
 
-Note: This is the server only.
+The REST-API for the Notes Management Tool.
+
+Note: This is the API only.
 You need the appropriate client which is hosted at <https://github.com/tbreuss/notes-client>.
 
 ## Install
 
-    git clone https://github.com/tbreuss/notes-server.git
-    cd notes-server
+    git clone https://github.com/tbreuss/notes-api.git
+    cd notes-api
     composer install
 
 ## Create/import database
