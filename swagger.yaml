@@ -1,0 +1,122 @@
+swagger: '2.0'
+info:
+  description: >-
+    The REST-API for the Notes Management Tool. You need the appropriate client
+    which is hosted at https://github.com/tbreuss/notes-client.
+  version: 1.0.0
+  title: REST-API for Notes Personal Management Tool
+  contact:
+    email: me+notes@tebe.ch
+  license:
+    name: MIT License
+    url: 'https://github.com/tbreuss/notes-api/blob/master/LICENSE'
+host: api.notes.tebe.ch
+basePath: /v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /:
+    get:
+      description: Get basic API info
+      operationId: /
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: API info
+          schema:
+            $ref: '#/definitions/Siteindex'  
+  /ping:
+    get:
+      description: Get ping
+      operationId: ping
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Ping info
+          schema:
+            $ref: '#/definitions/Ping' 
+  /login:
+    post:
+      description: Authenticate
+      operationId: login
+      produces:
+        - application/json
+      parameters:
+        - name: login
+          in: body
+          description: Login
+          required: true
+          schema:
+            $ref: '#/definitions/Login'        
+      responses:
+        '200':
+          description: Token
+          schema:
+            $ref: '#/definitions/Token'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+definitions:
+  Siteindex:
+    required:
+      - name
+    properties:
+      title:
+        type: string
+      info:
+        type: string
+      links:
+        type: object
+        properties:
+          github:
+            type: string
+          website:
+            type: string
+  Ping:
+    required:
+      - title
+      - info
+      - version
+    properties:
+      title:
+        type: string
+      info:
+        type: string
+      version:
+        type: string
+  Login:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+      password:
+        type: string   
+  Token:
+    type: string
+  ErrorModel:
+    type: object
+    required:
+      - name
+      - message
+      - code
+      - status
+    properties:
+      name:
+        type: string
+      message:
+        type: string
+      code:
+        type: integer
+        format: int32
+      status:
+        type: integer
