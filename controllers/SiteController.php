@@ -2,21 +2,20 @@
 
 namespace app\controllers;
 
-use app\components\BehaviorsTrait;
 use yii\rest\Controller;
 
 class SiteController extends Controller
 {
-    use BehaviorsTrait;
 
     public function actionIndex()
     {
         return [
             'title' => 'REST-API for Notes Management Tool',
             'info' => 'You need an appropriate client to access this API',
-            'github' => 'https://github.com/tbreuss/notes-client',
-            'url' => 'https://notes.tebe.ch',
-            'version' => '1.0'
+            'links' => [
+                'github' => 'https://github.com/tbreuss/notes-client',
+                'website' => 'https://notes.tebe.ch'
+            ]
         ];
     }
 
