@@ -24,10 +24,11 @@ class SiteController extends Controller
     {
         $exception = \Yii::$app->errorHandler->exception;
         return [
-            'name' => 'Not found exception',
+            'name' => 'Error Action',
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),
-            'status' => $exception->statusCode
+            'status' => $exception->statusCode,
+            'type' => get_class($exception)
         ];
     }
 }
