@@ -27,7 +27,7 @@ class SiteController extends Controller
             'name' => 'Not found exception',
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),
-            'status' => 404
+            'status' => $exception->statusCode
         ];
     }
 }
